@@ -1,3 +1,5 @@
 /AutoDeploy.sh
 /.idea
 /gosignaler
+/gotracker
+*.swp

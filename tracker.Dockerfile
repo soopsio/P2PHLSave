@@ -1,4 +1,4 @@
-FROM golang:1.11 AS build
+FROM golang:1.10 AS build
 RUN mkdir /app
 ADD . /app/
 WORKDIR /app
@@ -6,12 +6,11 @@ WORKDIR /app
 RUN go get github.com/gorilla/websocket \
     && go get github.com/gorilla/mux \
     && go get github.com/go-redis/redis \
-    && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gosignaler client.go handler.go hub.go main.go
-# CMD ["/app/main"]
+    && CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gotracker tracker.go
 
 
 FROM alpine
-COPY --from=build /app/gosignaler /usr/local/bin/gosignaler
-EXPOSE 8181
-CMD ["/usr/local/bin/gosignaler"]
+COPY --from=build /app/gotracker /usr/local/bin/gotracker
+EXPOSE 8787
+CMD ["/usr/local/bin/gotracker"]
 
