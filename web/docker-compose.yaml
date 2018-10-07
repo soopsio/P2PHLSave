@@ -1,0 +1,30 @@
+version: '2'
+services:
+  redis:
+    image: redis:4
+    container_name: p2p_hlsaver_redis
+  signaler:
+    image: etng/p2p_hlsaver_signaler
+    container_name: p2p_hlsaver_signaler
+    ports:
+      - 8181:8181
+  tracker:
+    image: etng/p2p_hlsaver_tracker
+    command: ["/usr/local/bin/gotracker", "-redis_host", "redis:6379"]
+    container_name: p2p_hlsaver_tracker
+    ports:
+      - 8787:8787
+  web:
+    working_dir: /var/www
+    image: nginx:1.15
+    container_name: p2p_hlsaver_web
+    volumes:
+       - ./default.conf:/etc/nginx/conf.d/default.conf
+       - ./server.crt:/etc/nginx/server.crt
+       - ./server.key:/etc/nginx/server.key
+       - ./demo.htm:/var/www/html/index.htm
+       - ./favicon.ico:/var/www/html/favicon.ico
+       - ./robots.txt:/var/www/html/robots.txt
+    ports:
+     - "8080:80"
+     - "8443:443"

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>DPlayer HLS demo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.24.0/DPlayer.min.css">
+  <style type="text/css">
+      #dplayer{
+        width: 70vw;
+        height: auto;
+        max-height: 90vh;
+        margin: 0 auto;
+      }
+
+        #dplayer-stat {
+           width: 70vw;
+           margin: 0 auto;
+            font-size: 14px;
+            border-radius: 2px;
+            background: rgba(28,28,28,.9);
+            padding: 7px 20px;
+            transition: all .3s ease-in-out;
+            overflow: hidden;
+            color: #fff;
+            pointer-events: none;
+        }
+  </style>
+</head>
+<body>
+    <div id="dplayer-stat">
+     流量统计
+      HTTP 下载: <span class="flow-http">0</span>
+      P2P 下载: <span class="flow-p2p-download">0</span>
+      P2P 上传: <span class="flow-p2p-upload">0</span>
+      版本: <span class="version">unknown</span>
+    </div>
+    <div id="dplayer">
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dplayer/1.24.0/DPlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/etng/p2p_hlsaver_plugin@0.5.5/all.min.js"></script>
+<script type="text/javascript">
+    var qsa = {}
+    location.search.substr(1).split('&').reduce(function(b, c){
+      var tmp = c.split('=', 2);
+      if(tmp[0]){
+        b[tmp[0]] = tmp[1]
+      }
+      return b
+    }, qsa)
+    console.log('qsa', qsa)
+    if (!qsa.debug) {
+      var elStat = document.getElementById('dplayer-stat')
+      if (elStat) {
+        elStat.parentElement.removeChild(elStat)
+      }
+    }
+    P2PEngine.dplayer(
+      'dplayer', // 容器 id
+      qsa.url || 'http://youku.com-i-youku.com/20180916/2317_42ae7b51/index.m3u8', //m3u8地址
+      "https://p2p.okzyp2p.com/tracker",  // tracker服务器地址
+      'wss://p2p.okzyp2p.com/wss' // 信令服务器地址
+    )
+</script>
+</html>
