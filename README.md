@@ -2,9 +2,8 @@
 
 ### build
 ```
-make build
-make signaler
-make tracker
+go build main.go hub.go client.go handler.go
+go run tracker.go
 ```
 ### test
 ```
